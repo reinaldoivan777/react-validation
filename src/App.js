@@ -1,23 +1,19 @@
 import React, { Component } from 'react';
 import './App.css';
 import Form from './Form.js';
-import { Row, Col } from 'react-bootstrap'
 import {
-  BrowserRouter as Router,
   Route,
-  Link
+  Redirect
 } from 'react-router-dom'
-
+import ThankYou from './ThankYou'
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <Row className="show-grid">
-          <Col xs={12} md={12}>
-            <Form />
-          </Col>
-        </Row>
+      <div className="App">    
+          <Redirect from='/' to="/form" />
+          <Route path="/form" component={Form} />
+          <Route path="/thank-you/" component={ThankYou} />
       </div>
     );
   }

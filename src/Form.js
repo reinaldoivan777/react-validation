@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { FormErrors } from './FormErrors';
 import './Form.css';
+import {
+    withRouter
+} from 'react-router-dom'
+import { Row, Col } from 'react-bootstrap'
+import data from './CountryCode.json'
 
 class Form extends Component {
     constructor(props) {
@@ -8,6 +13,7 @@ class Form extends Component {
         this.state = {
             name: '',
             email: '',
+            countryCode: '+62',
             phoneNumber: '',
             address:'',
             subsNewsletter: true,
@@ -24,16 +30,28 @@ class Form extends Component {
             passwordValid: false,
             formValid: false
         }
+        this.handleCountryCode = this.handleCountryCode.bind(this)
+        this.randomString = this.randomString.bind(this)
+    }
+
+    handleCountryCode(e) {
+        this.setState({
+            countryCode: e.target.value
+        })
     }
 
     handleUserInput(e) {
         const name = e.target.name
-        const value = e.target.value 
+        const value = e.target.value
+        
+        
         this.setState({
             [name]: value
         }, () => { this.validateField(name, value) })
+        
     }
 
+    //validasi form field
     validateField(fieldName, value){
         let fieldValidationErrors = this.state.formErrors
         let nameValid = this.state.nameValid
@@ -80,37 +98,75 @@ class Form extends Component {
         return (error.length === 0 ? '' : 'has error')
     }
 
+    //bikin random code invoice
+    randomString(length, char) {
+        let result = ''
+        for(let i = length; i > 0; --i)
+            result += char[Math.floor(Math.random() * char.length)]
+        return result
+    }
+
+    submitForm(e){
+        e.preventDefault()
+        let iCode = this.randomString(6, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+        
+        let data = {
+            name: this.state.name,
+            email: this.state.email,
+            phoneNumber: this.state.countryCode + this.state.phoneNumber,
+            address: this.state.address,
+            subsNewsletter: this.state.subsNewsletter,
+            invoiceCode: iCode
+        }
+        sessionStorage.setItem("info", JSON.stringify(data))
+        this.props.history.push(`/thank-you/?info`)
+    }
+
     render() {
         return (
-            <form>
-                <h2>Buy Ticket</h2>
-                <div className="panel panel-default">
-                    <FormErrors formErrors={this.state.formErrors} />
-                </div>
-                <div className={`form-group ${this.errorClass(this.state.formErrors.name)}`}>
-                    <label htmlFor="name">Name</label>
-                    <input type="text" className="form-control" name="name" placeholder="Your Name" value={this.state.name} onChange={(event) => this.handleUserInput(event)} />
-                </div>
-                <div className={`form-group ${this.errorClass(this.state.formErrors.email)}`}>
-                    <label htmlFor="email">Email Address</label>
-                    <input type="email" className="form-control" name="email" placeholder="Email" value={this.state.email} onChange={(event) => this.handleUserInput(event)} />
-                </div>
-                <div className={`form-group ${this.errorClass(this.state.formErrors.phone)}`}>
-                    <label htmlFor="phoneNumber">Phone Number</label>
-                    <input type="number" className="form-control" name="phoneNumber" placeholder="Phone Number" value={this.state.phoneNumber} onChange={(event) => this.handleUserInput(event)} />
-                </div>
-                <div className={`form-group`}>
-                    <label htmlFor="address">Address</label>
-                    <input type="text" className="form-control" name="address" placeholder="Address" value={this.state.address} maxLength="130" onChange={(event) => this.handleUserInput(event)} />
-                </div>
-                <div className="form-group">
-                    <input type="checkbox" id="subsNewsletter" checked />
-                    <label class="form-check-label" for="subsNewsletter">Subscribe Newsletter</label>
-                </div>
-                <button type="submit" className="btn btn-primary" disabled={!this.state.formValid}>Sign Up</button>
-            </form>
+            <Row className="show-grid">
+                <Col xs={12} md={12}>
+                    <form onSubmit={this.submitForm.bind(this)}>
+                        <h2>Buy Ticket</h2>
+                        <div className="panel panel-default">
+                            <FormErrors formErrors={this.state.formErrors} />
+                        </div>
+                        <div className={`form-group ${this.errorClass(this.state.formErrors.name)}`}>
+                            <label htmlFor="name">Name</label>
+                            <input type="text" className="form-control" name="name" placeholder="Your Name" value={this.state.name} onChange={(event) => this.handleUserInput(event)} />
+                        </div>
+                        <div className={`form-group ${this.errorClass(this.state.formErrors.email)}`}>
+                            <label htmlFor="email">Email Address</label>
+                            <input type="email" className="form-control" name="email" placeholder="Email" value={this.state.email} onChange={(event) => this.handleUserInput(event)} />
+                        </div>
+                        
+                        <div className={`form-group ${this.errorClass(this.state.formErrors.phone)}`}>
+                            <label htmlFor="phoneNumber">Phone Number</label>
+                            <select name="CountryCode" className="form-control" onChange={this.handleCountryCode}>
+                                <option value="">Select Country Code</option>
+                                {
+                                    data.map((countryCode) => {
+                                        return <option value={countryCode.dial_code}>{countryCode.dial_code + " " + countryCode.name}</option>
+                                    })
+                                }
+                            </select>
+                            <input type="number" className="form-control" name="phoneNumber" placeholder="Phone Number" value={this.state.phoneNumber} onChange={(event) => this.handleUserInput(event)} />
+                        </div>
+                        <div className={`form-group`}>
+                            <label htmlFor="address">Address</label>
+                            <input type="text" className="form-control" name="address" placeholder="Address" value={this.state.address} maxLength="130" onChange={(event) => this.handleUserInput(event)} />
+                        </div>
+                        <div className="form-group">
+                            <input type="checkbox" id="subsNewsletter" checked />
+                            <label class="form-check-label" for="subsNewsletter">Subscribe Newsletter</label>
+                        </div>
+                        <button type="submit" className="btn btn-primary" disabled={!this.state.formValid}>Submit</button>
+                    </form>
+                </Col>
+            </Row>
+            
         )
     }
 } 
 
-export default Form;
+export default withRouter(Form);
