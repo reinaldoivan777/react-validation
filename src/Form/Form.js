@@ -5,7 +5,7 @@ import {
     withRouter
 } from 'react-router-dom'
 import { Row, Col } from 'react-bootstrap'
-import data from './CountryCode.json'
+import data from '../Data/CountryCode.json'
 
 class Form extends Component {
     constructor(props) {

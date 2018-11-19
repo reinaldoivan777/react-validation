@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
-import Form from './Form.js';
+import Form from './Form/Form.js';
 import {
   Route,
   Redirect
 } from 'react-router-dom'
-import ThankYou from './ThankYou'
+import ThankYou from './ThankYou/ThankYou'
 
 class App extends Component {
   render() {
