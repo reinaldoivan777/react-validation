@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormErrors } from './FormErrors';
-import './Form.css';
+import '../css/style.css';
 import {
     withRouter
 } from 'react-router-dom'
@@ -13,7 +13,7 @@ class Form extends Component {
         this.state = {
             name: '',
             email: '',
-            countryCode: '+62',
+            countryCode: '+62', //phone secara default akan memiliki country code +62
             phoneNumber: '',
             address:'',
             subsNewsletter: true,
@@ -123,34 +123,35 @@ class Form extends Component {
     }
 
     render() {
+        const countryCodeOptions = data.map((countryCode) => {
+            return <option value={countryCode.dial_code}>{`${countryCode.name} (${countryCode.dial_code})`}</option>
+        })
+
         return (
             <Row className="show-grid">
-                <Col xs={12} md={12}>
+                <Col md={3}></Col>
+                <Col xs={12} md={6}>
                     <form onSubmit={this.submitForm.bind(this)}>
                         <h2>Buy Ticket</h2>
                         <div className="panel panel-default">
                             <FormErrors formErrors={this.state.formErrors} />
                         </div>
                         <div className={`form-group ${this.errorClass(this.state.formErrors.name)}`}>
-                            <label htmlFor="name">Name</label>
+                            <label htmlFor="name">Name <span className="required">*</span></label>
                             <input type="text" className="form-control" name="name" placeholder="Your Name" value={this.state.name} onChange={(event) => this.handleUserInput(event)} />
                         </div>
                         <div className={`form-group ${this.errorClass(this.state.formErrors.email)}`}>
-                            <label htmlFor="email">Email Address</label>
+                            <label htmlFor="email">Email <span className="required">*</span></label>
                             <input type="email" className="form-control" name="email" placeholder="Email" value={this.state.email} onChange={(event) => this.handleUserInput(event)} />
                         </div>
                         
                         <div className={`form-group ${this.errorClass(this.state.formErrors.phone)}`}>
-                            <label htmlFor="phoneNumber">Phone Number</label>
-                            <select name="CountryCode" className="form-control" onChange={this.handleCountryCode}>
+                            <label htmlFor="phoneNumber">Phone Number <span className="required">*</span></label>
+                            <select name="CountryCode" className="form-control"  onChange={this.handleCountryCode}>
                                 <option value="">Select Country Code</option>
-                                {
-                                    data.map((countryCode) => {
-                                        return <option value={countryCode.dial_code}>{countryCode.dial_code + " " + countryCode.name}</option>
-                                    })
-                                }
+                                {countryCodeOptions}
                             </select>
-                            <input type="number" className="form-control" name="phoneNumber" placeholder="Phone Number" value={this.state.phoneNumber} onChange={(event) => this.handleUserInput(event)} />
+                            <input type="number" className="phone" name="phoneNumber" placeholder="Phone Number" value={this.state.phoneNumber} onChange={(event) => this.handleUserInput(event)} />
                         </div>
                         <div className={`form-group`}>
                             <label htmlFor="address">Address</label>

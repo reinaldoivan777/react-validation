@@ -1,0 +1,74 @@
+.demoForm {
+    width: 50%;
+    margin: auto;
+  }
+
+  body {
+    text-align: center;
+    font-family: 'Titillium Web', sans-serif;
+  }
+
+  .thankYou {
+    font-family: 'Titillium Web', sans-serif;
+  }
+
+  h1.thankYou {
+    font-size: 700%;
+    margin-top: 7%;
+  }
+
+  p.thankYou {
+    font-size: 200%;
+  }
+
+  .required {
+    color: #f83939;
+  }
+
+  .invoice {
+    text-align: center;
+  }
+
+  table.table {
+    text-align: center;
+    width: 100%;
+  }
+
+  ul  {
+    list-style-type: none;
+    text-align: left;
+  }
+
+  .glyphicon.glyphicon-ok {
+    font-size: 500%;
+    color: #6cd16c;
+  }
+  
+  form {
+    font-family: 'Titillium Web', sans-serif;
+    text-align: center;
+  }
+  
+  select.form-control {
+    position: relative;
+    width: 30%;
+  }
+  
+  .phone {
+    display: inline-grid;
+    width: 55%;
+    position: absolute;
+    height: 34px;
+    padding: 0px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    margin-top: -35px;
+    margin-left: -49px;
+  }
