@@ -32,6 +32,13 @@ class Form extends Component {
         }
         this.handleCountryCode = this.handleCountryCode.bind(this)
         this.randomString = this.randomString.bind(this)
+        this.handleCheckbox = this.handleCheckbox.bind(this)
+    }
+
+    handleCheckbox(e) {
+        this.setState({
+            subsNewsletter: !this.state.subsNewsletter
+        })
     }
 
     handleCountryCode(e) {
@@ -107,19 +114,23 @@ class Form extends Component {
     }
 
     submitForm(e){
-        e.preventDefault()
-        let iCode = this.randomString(6, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+        try {
+            let iCode = this.randomString(6, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
         
-        let data = {
-            name: this.state.name,
-            email: this.state.email,
-            phoneNumber: this.state.countryCode + this.state.phoneNumber,
-            address: this.state.address,
-            subsNewsletter: this.state.subsNewsletter,
-            invoiceCode: iCode
+            let data = {
+                name: this.state.name,
+                email: this.state.email,
+                phoneNumber: this.state.countryCode + this.state.phoneNumber,
+                address: this.state.address,
+                subsNewsletter: this.state.subsNewsletter,
+                invoiceCode: iCode
+            }
+            sessionStorage.setItem("info", JSON.stringify(data))
+            this.props.history.push(`/thank-you/?info`)
         }
-        sessionStorage.setItem("info", JSON.stringify(data))
-        this.props.history.push(`/thank-you/?info`)
+        catch(err) {
+            alert(err.message)
+        }
     }
 
     render() {
@@ -158,7 +169,7 @@ class Form extends Component {
                             <input type="text" className="form-control" name="address" placeholder="Address" value={this.state.address} maxLength="130" onChange={(event) => this.handleUserInput(event)} />
                         </div>
                         <div className="form-group">
-                            <input type="checkbox" id="subsNewsletter" checked />
+                            {(this.state.subsNewsletter === true) ? (<input type="checkbox" id="subsNewsletter" onChange={(event) => this.handleCheckbox(event) } checked />) : (<input type="checkbox" id="subsNewsletter" onChange={(event) => this.handleCheckbox(event) } />) }
                             <label class="form-check-label" for="subsNewsletter">Subscribe Newsletter</label>
                         </div>
                         <button type="submit" className="btn btn-primary" disabled={!this.state.formValid}>Submit</button>

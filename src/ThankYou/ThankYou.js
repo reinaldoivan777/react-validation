@@ -51,6 +51,12 @@ class ThankYou extends Component {
                         </table>
                     </Col>
                 </Row>
+                <Row className="show-grid">
+                    <Col xs={2} md={3}></Col>
+                    <Col xs={8} md={6}>
+                        {(data.subsNewsletter === true) ? (<p><strong>Terima kasih sudah subscribe, anda akan menerima informasi-informasi terbaru dari kami secara rutin</strong></p>) : ''}
+                    </Col>
+                </Row>
             </div>
         );
     }
